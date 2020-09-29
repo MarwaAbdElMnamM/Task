@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Task.Models.Client>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 style="text-align:center">ALL CLIENTS</h2>
+
+<p>
+    <a href="/Clients/Create" class="btn btn-primary">Create New</a>
+   
+</p>
+<table class="table" style="font-style:oblique">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            <a href="/Clients/Edit/@item.ID" class="btn btn-success">Edit</a>
+            |
+            <a href="/Clients/Details/@item.ID" class="btn btn-primary">Details</a>
+            |
+            <a href="/Clients/Delete/@item.ID" class="btn btn-danger">Delete</a>
+            )
+        </td>
+    </tr>
+}
+
+</table>

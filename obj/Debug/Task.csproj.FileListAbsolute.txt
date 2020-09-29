@@ -87,3 +87,5 @@ E:\KIARA\Task\Task\obj\Debug\Task.csproj.CopyComplete
 E:\KIARA\Task\Task\obj\Debug\Task.dll
 E:\KIARA\Task\Task\obj\Debug\Task.pdb
 E:\KIARA\Task\Task\obj\Debug\Task.csprojAssemblyReference.cache
+E:\KIARA\Task\Task\obj\Debug\Task.Migrations.taskk.resources
+E:\KIARA\Task\Task\obj\Debug\Task.csproj.GenerateResource.cache
