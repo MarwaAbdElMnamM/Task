@@ -10,7 +10,6 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Task.Models;
 using TaskApi.Helpers;
-using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 
 namespace Task.Controllers
@@ -19,6 +18,7 @@ namespace Task.Controllers
     {
         Helper api = new Helper();
         public async Task<ActionResult> GetAllClient()
+
         {
             List<Client> clint = new List<Client>();
             HttpClient client = api.initial();
@@ -42,13 +42,12 @@ namespace Task.Controllers
             }
             return View(client1);
         }
-        
-        public ActionResult CreateClient()
+
+        public ActionResult NewClient()
         {
             return View();
         }
-        
-
+      
         public async Task<ActionResult> CreateClient(Client client)
         {
             HttpClient client1 = api.initial();
@@ -66,6 +65,23 @@ namespace Task.Controllers
             return View();
 
         }
+        public ActionResult NewDept()
+        {
+            
+            return View();
+        }
+       /* public ActionResult SaveDept(Client client)
+        {
+            var Department = context.Departments.FirstOrDefault(d => d.ID == Client);
+            student.Department = Department;
+
+            context.Students.Add(student);
+            context.SaveChanges();
+            //return RedirectToAction("Details", "student", new { id = student.ID });
+             return RedirectToAction("index");
+           // return View("index", context.Students.ToList());
+           
+        }*/
         public async Task<ActionResult> EditClient(int id)
         {
             var client2 = new Client();
@@ -79,7 +95,6 @@ namespace Task.Controllers
             return View(client2);
         }
 
-        [HttpPost]
         public async Task<ActionResult> EditClient(Client client)
         {
             HttpClient client3 = api.initial();

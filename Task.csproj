@@ -145,6 +145,7 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\ClientPhoneNumber.cs" />
+    <Compile Include="Models\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

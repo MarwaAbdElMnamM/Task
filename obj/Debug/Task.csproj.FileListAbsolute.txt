@@ -86,3 +86,4 @@ E:\KIARA\Task\Task\obj\Debug\Task.csproj.CoreCompileInputs.cache
 E:\KIARA\Task\Task\obj\Debug\Task.csproj.CopyComplete
 E:\KIARA\Task\Task\obj\Debug\Task.dll
 E:\KIARA\Task\Task\obj\Debug\Task.pdb
+E:\KIARA\Task\Task\obj\Debug\Task.csprojAssemblyReference.cache
