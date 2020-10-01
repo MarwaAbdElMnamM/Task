@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+</head>
+<body style="padding-top:20px;background-color: black;">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="well">
+            <tr>
+                <input type="button" id="loaddata" class="btn btn-primary" value="Load All Clients" />
+           
+                <br><br>
+                    <input type="button" id="getone" class="btn btn-primary" value="Get One client" />
+                    <input type="text" id="idorder" placeholder="ID"><br><br>
+            </tr><br>
+            <div class="well hidden" id="divData">
+                <table class="table table-bordered" id="tbldata">
+                    <thead>
+                        <tr >
+                            <th>ID</th>
+                            <th>name</th>
+                            <th>Email</th>
+                            <th>address</th>
+                            <th>PhoneNumber</th>
+                            <th>SecondPhNum</th>
+                            
+                         
+                        </tr>
+                    </thead>
+                    <tbody id="tblBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="well" id="divform">
+                <table class="table table-bordered">
+                
+                    <tbody id="tblBody">
+                        <tr> <td style="font-weight:bold;font-size:12px;">Name</td>
+                            <td><input type="text" id="txttname" placeholder="Enter Product name " /></td>
+                        </tr>
+    
+                            <tr> <td style="font-weight:bold;font-size:12px;">Email</td>
+                            <td><input type="email" id="txttemail"placeholder="Enter your email" /></td>
+                        </tr>
+                    </tr>
+    
+                    <tr> <td style="font-weight:bold;font-size:12px;">Address</td>
+                    <td><input type="text" id="txttAddress" placeholder="Enter Address"/></td>
+                </tr>
+                <tr> <td style="font-weight:bold;font-size:12px;">PhoneNumber</td>
+                    <td><input type="number" id="txttPhoneNumber" placeholder="Enter PhoneNumber"/></td>
+                </tr>
+                <tr> <td style="font-weight:bold;font-size:12px;">SecondPhoneNumber</td>
+                    <td><input type="number" id="txttSecondPhoneAddress" placeholder="Enter SecondPhoneNumber"/></td>
+                </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">
+                                    <input type="button" id="adddata" onclick="Add()" class="btn btn-secondary
+                                    " value="Add Client" />
+                                    <input type="button" id="putorder"  class="btn btn-danger" value="Edit Client" />
+                                    
+                            </td>
+    
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        
+            <div class="modal fade" tabindex="-1" id="errorModal" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4>Session Expired</h4>
+                        </div>
+    
+                        <div class="modal-body">
+                            <h2> Close the Message to log in again </h2>
+                        </div>
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+            <div id="divError" class=" alert alert-danger collapse">
+                <a id="linkClose" class="close" href="#">&times;</a>
+                <div id="divErrorTxt">
+    
+                </div>
+    
+            </div>
+        </div>
+    
+       
+        
+    
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+              /* if(sessionStorage.getItem("accessToken") == null )
+                            {
+                                window.location.href = "Page1.html"
+                            */
+    
+                $("#linkClose").click(function () { $("#divError").hide("fade"); })
+                $("#loaddata").click(function () {
+                    $.ajax({
+                        url:'http://localhost:51203/api/Clients',
+                        method: 'GET',
+                    
+                        headers: {
+                            'Authorization': 'Bearer '
+                                + sessionStorage.getItem("accessToken")
+                        },
+    
+                        success: function (data) {
+                           
+                            $("#divData").removeClass('hidden');
+                            $('#tblBody').empty();
+                            $.each(data, function (index, value) {
+                                var row = $('<tr><td>' + value.ID + '</td><td>'
+                                    + value.name
+                                 + '</td><td>'
+                                    + value.Email
+                                   
+                                   + '</td><td>'
+                                   +value.address
+                                    + '</td><td>'
+                                        +value.PhoneNumber
+                                    + '</td><td>'
+                                        +value.SecondPhNum
+                                    + '</td><td>'
+                                    +"<button onclick='Remove("+value.ID+ ")'class='btn btn-danger'>Delete client</button>"
+                                
+                                    +"<button onclick='put("+value.ID+ ")'class='btn btn-secondary'>Edit client</button>"
+                                    + '</td></tr>');
+                                     
+                                    
+                                    
+                                     $('#tblBody').append(row);
+                            });
+    
+                        },
+                        Error: function (jqxht) {
+                            $("#divErrorTxt").text(jqxht.responseText);
+                            $('#divError').show('fade');
+                        }
+    
+    
+                    });
+                })
+            
+            
+            })
+    
+       /*-----------------Add-------------------*/
+        function Add()
+        {
+            $.ajax({
+                url:'http://localhost:51203/api/Clients',
+                type:'POST',
+                dataType:'json',
+                headers: {
+                            'Authorization': 'Bearer '
+                                + sessionStorage.getItem("accessToken")
+            },
+                data:{
+                    Name:$('#txttname').val(),
+                    Email:$('#txttemail').val(),
+                    address:$('#txttAddress').val(),
+                    PhoneNumber:$('#txttPhoneNumber').val(),
+                    SecondPhNum:$('#txttSecondPhoneAddress').val(),
+                },
+                
+                success: function (response) {  
+                           
+                           alert("Client is add");
+                          
+                        },
+                        error: function (xhr) {
+                            $("#divErrorTxt").text(xhr.responseText);
+                            $('#divError').show('fade');
+                        }
+                       
+                    });
+        }
+    /*-----------------------Delete-----------------------------*/
+            function Remove(id)
+            {
+            
+                $.ajax({
+                    url:'http://localhost:51203/api/Clients/'+id,
+                    type:'DELETE',
+                    headers: {
+                            'Authorization': 'Bearer '
+                                + sessionStorage.getItem("accessToken")
+                        },
+                    dataType:'json',
+                    data:{
+                      
+                        "name":$('#txttname').val(),
+                    "Email":$('#txttemail').val(),
+                    "address":$('#txttAddress').val(),
+                    "PhoneNumber":$('#txttPhoneNumber').val(),
+                    " SecondPhNum":$('#txttSecondPhoneAddress').val(),
+                    "ClientId ":null
+                    
+                     },
+                    
+                    success: function (response) {  
+                               
+                               
+                                alert("Deleted Success");
+                                
+                                window.location.href = "Page1.html";
+                            },
+                            error: function (xhr) {
+                                $("#divErrorTxt").text(xhr.responseText);
+                                $('#divError').show('fade');
+                            }
+                           
+                        });
+            }
+            /*----------------------------put----------------------*/
+    
+    
+    
+            function put2(id)
+        {
+            
+            $.ajax({
+                url: 'http://localhost:51203/api/Clients/'+id,           
+                method: 'Get',
+                headers: {
+                    'Authorization': 'Bearer '
+                        + sessionStorage.getItem("accessToken")
+                },
+                success: function (value) { 
+                    
+                    $('#txttname').val(value.name);
+                    $('#txttemail').val(value.Email);
+                    $('#txttAddress').val(value.address);
+                    $('#txttPhoneNumber').val(value.PhoneNumber);
+                    $('#txttSecondPhoneAddress').val(value.SecondPhNum);
+                }              
+            });        
+        }
+    
+        function put(id)
+        {
+            put2(id);
+            $("#putorder").click(function () {         
+                $.ajax ({
+                    url : 'http://localhost:51203/api/Clients/'+id,
+                    type : "Put",
+                    headers: {
+                                'Authorization': 'Bearer '
+                                    + sessionStorage.getItem("accessToken")
+                                },
+                    dataType : "json",
+                    data : {
+                        "ID":id,
+                        "name":$('#txttname').val(),
+                    "Email":$('#txttemail').val(),
+                    "address":$('#txttAddress').val(),
+                    "PhoneNumber":$('#txttPhoneNumber').val(),
+                    "SecondPhNum":$('#txttSecondPhoneAddress').val(),
+                },
+                        success: function (response) { 
+                            alert("Data is Edited")
+                                    window.location.href = "Page1.html";
+                                },
+                                error: function (xhr) {
+                                    $("#divErrorTxt").text(xhr.responseText);
+                                    $('#divError').show('fade');
+                                }                      
+                        });
+            })
+        }
+    
+    
+            /*-----------------------------getone-------------------------------*/
+            $('#getone').click(function () {
+               id=$('#idorder').val();
+               if(id != "")
+               {
+                $.ajax({
+                        url: 'http://localhost:51203/api/Clients/'+id,           
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer '
+                                + sessionStorage.getItem("accessToken")
+                        },
+                        success: function (value) { 
+                            
+                            $('#divData').removeClass('hidden');
+                            $('#tblBody').empty();                  
+                                var row = $('<tr><td>' + value.ID + '</td><td>'
+                                    + value.name + '</td><td>'
+                                    + value.Email + '</td><td>'
+                                    + value.address + '</td><td>'
+                                        + value.PhoneNumber + '</td><td>'
+                                            + value.SecondPhNum + '</td><td>'
+                                        +"<button onclick='Remove("+value.ID+ ")'class='btn btn-danger'>Delete</button>"
+                                    +"<button onclick='put("+value.ID+ ")'class='btn btn-primary'>Edit Client</button>"
+                                    + '</td></tr>');
+                                $('#tblBody').append(row);  
+                            
+    
+                        },
+                        error: function (jqXHR) {
+                            alert("Client not found ...");
+                            
+                        }
+                    });
+                
+               }else
+               {
+                   alert("Enter Id")
+               }
+    
+            });
+    
+    
+    
+        </script>
+    
+    </body>
+    </html>
